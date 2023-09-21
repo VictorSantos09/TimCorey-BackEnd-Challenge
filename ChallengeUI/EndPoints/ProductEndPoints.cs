@@ -16,7 +16,7 @@ public static class ProductEndPoints
             return Results.Ok(result);
         });
 
-        group.MapPost("/buy", async (BuyProductDTO dto) => 
+        group.MapPost("/buy", async (BuyProductDTO dto) =>
         {
             var result = await _service.Buy(dto);
             return result.Success ? BaseDTO.Valid("produto comprado") : BaseDTO.Invalid("produto não comprado", result.Message);

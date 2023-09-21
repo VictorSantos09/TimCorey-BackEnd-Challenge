@@ -70,7 +70,7 @@ internal class ProductDAO : DatabaseConnection
             using (_connection = Connect())
             {
                 var result = await _connection.QueryAsync<ProductSQL>("SELECT * FROM products");
-                
+
                 foreach (var p in result)
                 {
                     output.Add(Convert(p));

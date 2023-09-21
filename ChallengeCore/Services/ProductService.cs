@@ -10,7 +10,7 @@ public class ProductService
     {
         var result = await _dao.GetUserProducts(email);
         return result.Count() <= 0 ? BaseDTO.Valid("Nenhum produto encontrado") : BaseDTO.Valid("produtos encontrados", result);
-    } 
+    }
 
     public async Task<BaseDTO> Buy(BuyProductDTO dto)
     {
