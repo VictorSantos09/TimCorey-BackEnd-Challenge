@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ChallengeCore.DTOs;
+﻿namespace ChallengeCore.DTOs;
 public class UserDTO
 {
     public string Name { get; set; }

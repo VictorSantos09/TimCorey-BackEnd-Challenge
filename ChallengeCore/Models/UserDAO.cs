@@ -1,5 +1,7 @@
 ﻿using ChallengeCore.Data;
 using ChallengeCore.DTOs;
+using ChallengeCore.SQLModels;
+using Dapper;
 
 namespace ChallengeCore.Models;
 internal class UserDAO : DatabaseConnection
@@ -8,21 +10,17 @@ internal class UserDAO : DatabaseConnection
     {
         try
         {
-            _connection = Connect();
-            _connection.Open();
-
-            var cmd = _connection.CreateCommand();
-            cmd.CommandText = "insert into users (US_NAME, US_EMAIL, US_PASSWORD) values (?,?,?)";
-            cmd.Parameters.AddWithValue("US_NAME", dto.Name.ToUpper());
-            cmd.Parameters.AddWithValue("US_EMAIL", dto.Email.ToUpper());
-            cmd.Parameters.AddWithValue("US_PASSWORD", dto.Password);
-            await cmd.ExecuteNonQueryAsync();
+            using (_connection = Connect())
+            {
+                await _connection.ExecuteAsync("insert into users (US_NAME, US_EMAIL, US_PASSWORD) VALUES(@Name, @Email, @Password)",
+                    new { Name = dto.Name.ToUpper(), Email = dto.Email.ToUpper(), dto.Password });
+            }
             return true;
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            throw;
+            return false;
         }
         finally { Disconnect(); }
     }
@@ -31,22 +29,18 @@ internal class UserDAO : DatabaseConnection
     {
         try
         {
-            _connection = Connect();
-            _connection.Open();
-            var cmd = _connection.CreateCommand();
-            cmd.CommandText = "select US_NAME, US_EMAIL from USERS where US_EMAIL = @email and US_PASSWORD = @password";
-            cmd.Parameters.AddWithValue("@email", email.ToUpper());
-            cmd.Parameters.AddWithValue("@password", password);
-
-            using (var reader = await cmd.ExecuteReaderAsync())
+            using (_connection = Connect())
             {
-                return new UserDTO(reader.GetString(0), reader.GetString(1), null);
+                var result = await _connection.QueryFirstAsync<UserSQL>("select US_NAME, US_EMAIL FROM users WHERE US_EMAIL = @Email AND US_PASSWORD = @Password",
+                    new { Email = email.ToUpper(), Password = password });
+
+                return result is null ? null : new UserDTO() { Name = result.US_NAME, Email = result.US_EMAIL };
             }
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            throw;
+            return null;
         }
         finally { Disconnect(); }
     }

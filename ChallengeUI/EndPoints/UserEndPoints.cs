@@ -19,7 +19,7 @@ namespace ChallengeUI.EndPoints
             group.MapPost("/view", async (string email, string password) =>
             {
                 var result = await _service.ViewInfo(email, password);
-                return result.Success ? Results.Ok("Usuário encontrado") : Results.BadRequest("Usuário não existente");
+                return result.Success ? Results.Ok(result.Data) : Results.BadRequest("Usuário não existente");
             }).WithName("view");
         }
     }

@@ -19,4 +19,5 @@ app.UseSwaggerUI(c =>
 });
 
 app.MapUserEndPoints();
+app.MapProductsEndPoints();
 app.Run();
