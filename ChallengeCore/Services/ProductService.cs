@@ -8,13 +8,13 @@ public class ProductService
 
     public async Task<BaseDTO> GetUserProducts(string email)
     {
-        var result = await _dao.GetUserProducts(email);
-        return result.Count() <= 0 ? BaseDTO.Valid("Nenhum produto encontrado") : BaseDTO.Valid("produtos encontrados", result);
+        IEnumerable<SQLModels.ViewUserProductsSQL> result = await _dao.GetUserProducts(email);
+        return !result.Any() ? BaseDTO.Valid("Nenhum produto encontrado") : BaseDTO.Valid("produtos encontrados", result);
     }
 
     public async Task<BaseDTO> Buy(BuyProductDTO dto)
     {
-        var result = await _dao.AddBoughtProduct(dto);
+        BaseDTO result = await _dao.AddBoughtProduct(dto);
         return result;
     }
 

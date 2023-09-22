@@ -2,10 +2,10 @@
 using System.Data;
 
 namespace ChallengeCore.Data;
-internal class DatabaseConnection
+public class DatabaseConnection
 {
-    private readonly string _connectionString = "Server=localhost;Database=testing;Uid=root;Pwd=root;";
-    protected IDbConnection _connection;
+    private readonly string _connectionString = "Server=localhost;Database=timcorey;Uid=root;Pwd=root;";
+    protected IDbConnection? _connection;
 
     protected IDbConnection Connect()
     {

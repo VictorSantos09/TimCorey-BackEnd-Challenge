@@ -3,13 +3,13 @@ public class UserDTO
 {
     public string Name { get; set; }
     public string Email { get; set; }
-    public string Password { get; set; }
+    public string Nickname { get; set; }
 
-    public UserDTO(string name, string email, string password)
+    public UserDTO(string name, string email, string nickname)
     {
         Name = name;
         Email = email;
-        Password = password;
+        Nickname = nickname;
     }
 
     public UserDTO()

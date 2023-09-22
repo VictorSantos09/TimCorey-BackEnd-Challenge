@@ -4,43 +4,66 @@ using ChallengeCore.SQLModels;
 using Dapper;
 
 namespace ChallengeCore.Models;
-internal class UserDAO : DatabaseConnection
+public class UserDAO : DatabaseConnection
 {
-    public async Task<bool> Create(UserDTO dto)
+    public async Task<BaseDTO> Create(UserDTO dto)
     {
         try
         {
             using (_connection = Connect())
             {
-                await _connection.ExecuteAsync("insert into users (US_NAME, US_EMAIL, US_PASSWORD) VALUES(@Name, @Email, @Password)",
-                    new { Name = dto.Name.ToUpper(), Email = dto.Email.ToUpper(), dto.Password });
+                var result = await _connection.QueryAsync<UserSQL>("SELECT US_EMAIL, US_NICKNAME FROM users WHERE US_EMAIL = @Email AND US_NICKNAME = @Nickname",
+                    new
+                    {
+                        Email = dto.Email.ToUpper(),
+                        Nickname = dto.Nickname.ToUpper()
+                    });
+
+                if (result.Any())
+                    return BaseDTO.Invalid("usuário já existente");
+
+                _ = await _connection.ExecuteAsync("INSERT INTO users (US_NAME, US_EMAIL, US_NICKNAME) VALUES (@Name, @Email, @Nickname)",
+                    new
+                    {
+                        Name = dto.Name.ToUpper(),
+                        Email = dto.Email.ToUpper(),
+                        Nickname = dto.Nickname.ToUpper()
+                    });
             }
-            return true;
+            return BaseDTO.Valid("conta criada com sucesso");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Console.WriteLine(ex.Message);
-            return false;
+            throw;
         }
         finally { Disconnect(); }
     }
 
-    public async Task<UserDTO?> Get(string email, string password)
+    public async Task<UserDTO?> Get(string email, string nickname)
     {
         try
         {
             using (_connection = Connect())
             {
-                var result = await _connection.QueryFirstAsync<UserSQL>("select US_NAME, US_EMAIL FROM users WHERE US_EMAIL = @Email AND US_PASSWORD = @Password",
-                    new { Email = email.ToUpper(), Password = password });
+                var resultSQL = await _connection.QueryAsync<UserSQL>("SELECT US_NAME, US_EMAIL, US_NICKNAME FROM users WHERE US_EMAIL = @Email AND US_NICKNAME = @Nickname",
+                    new
+                    {
+                        Email = email.ToUpper(),
+                        Nickname = nickname
+                    });
+                var first = resultSQL.FirstOrDefault();
 
-                return result is null ? null : new UserDTO() { Name = result.US_NAME, Email = result.US_EMAIL };
+                return first is null ? null : new UserDTO()
+                {
+                    Name = first.US_NAME,
+                    Email = first.US_EMAIL,
+                    Nickname = first.US_NICKNAME
+                };
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Console.WriteLine(ex.Message);
-            return null;
+            throw;
         }
         finally { Disconnect(); }
     }

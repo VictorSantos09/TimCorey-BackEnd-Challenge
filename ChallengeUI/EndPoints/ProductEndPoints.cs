@@ -5,26 +5,26 @@ namespace ChallengeUI.EndPoints;
 
 public static class ProductEndPoints
 {
-    private static readonly ProductService _service = new();
+    private static readonly ProductService _productService = new();
 
     public static void MapProductsEndPoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("api/products");
-        group.MapPost("/viewUsersProducts", async (string email) =>
+        RouteGroupBuilder group = app.MapGroup("api/products");
+        _ = group.MapPost("/viewUsersProducts", async (string email) =>
         {
-            var result = await _service.GetUserProducts(email);
+            BaseDTO result = await _productService.GetUserProducts(email);
             return Results.Ok(result);
         });
 
-        group.MapPost("/buy", async (BuyProductDTO dto) =>
+        _ = group.MapPost("/buy", async (BuyProductDTO dto) =>
         {
-            var result = await _service.Buy(dto);
+            BaseDTO result = await _productService.Buy(dto);
             return result.Success ? BaseDTO.Valid("produto comprado") : BaseDTO.Invalid("produto não comprado", result.Message);
         });
 
-        group.MapGet("/viewProducts", async () =>
+        _ = group.MapGet("/viewProducts", async () =>
         {
-            var result = await _service.ViewAll();
+            BaseDTO result = await _productService.ViewAll();
             return result;
         });
     }

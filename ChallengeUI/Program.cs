@@ -1,21 +1,21 @@
 using ChallengeCore.Services;
 using ChallengeUI.EndPoints;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<UserService>();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
-    app.UseDeveloperExceptionPage();
+    _ = app.UseDeveloperExceptionPage();
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Tim Correy Challenge");
-    c.RoutePrefix = String.Empty;
+    c.RoutePrefix = string.Empty;
 });
 
 app.MapUserEndPoints();

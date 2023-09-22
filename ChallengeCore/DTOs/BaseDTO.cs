@@ -12,6 +12,13 @@ public class BaseDTO
         Data = data;
     }
 
-    public static BaseDTO Invalid(string message, object? data = null) => new(false, message, data);
-    public static BaseDTO Valid(string message, object? data = null) => new(true, message, data);
+    public static BaseDTO Invalid(string message, object? data = null)
+    {
+        return new(false, message, data);
+    }
+
+    public static BaseDTO Valid(string message, object? data = null)
+    {
+        return new(true, message, data);
+    }
 }
