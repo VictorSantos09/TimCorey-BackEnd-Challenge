@@ -1,0 +1,12 @@
+INSERT INTO products (PR_NAME, PR_PRICE)
+VALUES
+    ('Arroz', 3.99),
+    ('Feijão', 2.49),
+    ('Macarrão', 1.29),
+    ('Leite', 2.99),
+    ('Ovos (dúzia)', 2.19),
+    ('Pão', 1.49),
+    ('Bananas (kg)', 2.79),
+    ('Cenouras (kg)', 1.99),
+    ('Sabonete', 0.99),
+    ('Detergente', 1.79);
