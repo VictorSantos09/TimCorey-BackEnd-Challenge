@@ -87,6 +87,13 @@ Response - 400
 ```
 Response - 200
 {
+  "message": "usuário não encontrado"
+}
+```
+
+```
+Response - 200
+{
   "name": "EXAMPLE",
   "email": "EXAMPLE@TEST.COM",
   "nickname": "EXAMPLE_NICKNAME"
