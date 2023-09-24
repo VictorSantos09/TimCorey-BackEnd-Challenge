@@ -85,7 +85,7 @@ Response - 400
 | `nickname` | `string` |  Apelido do usuário |
 
 ```
-Response - 200
+Response - 400
 {
   "message": "usuário não encontrado"
 }
