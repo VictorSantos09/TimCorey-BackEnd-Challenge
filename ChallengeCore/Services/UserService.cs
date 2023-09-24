@@ -15,6 +15,15 @@ public class UserService
     {
         try
         {
+            if (dto.Name.Length < 3)
+                return BaseDTO.Invalid("nome deve conter no mínimo 3 dígitos.");
+
+            if (!dto.Email.Contains('@') || dto.Email.Length < 3)
+                return BaseDTO.Invalid("email deve conter '@' e no mínimo 3 dígitos.");
+
+            if (dto.Nickname.Length < 3)
+                return BaseDTO.Invalid("nickname deve conter no mínimo 3 dígitos.");
+
             return await _userDAO.Create(dto);
         }
         catch (Exception)

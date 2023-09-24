@@ -1,3 +1,5 @@
+USE timcorey;
+
 INSERT INTO products (PR_NAME, PR_PRICE)
 VALUES
     ('Arroz', 3.99),

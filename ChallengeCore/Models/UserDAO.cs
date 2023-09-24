@@ -12,7 +12,7 @@ public class UserDAO : DatabaseConnection
         {
             using (_connection = Connect())
             {
-                var result = await _connection.QueryAsync<UserSQL>("SELECT US_EMAIL, US_NICKNAME FROM users WHERE US_EMAIL = @Email AND US_NICKNAME = @Nickname",
+                var result = await _connection.QueryAsync<UserSQL>("SELECT US_EMAIL, US_NICKNAME FROM users WHERE US_EMAIL = @Email OR US_NICKNAME = @Nickname",
                     new
                     {
                         Email = dto.Email.ToUpper(),

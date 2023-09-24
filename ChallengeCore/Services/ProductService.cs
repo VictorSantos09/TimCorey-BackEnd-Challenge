@@ -14,6 +14,9 @@ public class ProductService
 
     public async Task<BaseDTO> Buy(BuyProductDTO dto)
     {
+        if (dto.Amount <= 0)
+            return BaseDTO.Invalid("quantidade inválida");
+
         BaseDTO result = await _dao.AddBoughtProduct(dto);
         return result;
     }

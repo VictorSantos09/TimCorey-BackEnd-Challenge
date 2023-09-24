@@ -19,13 +19,13 @@ public static class ProductEndPoints
         _ = group.MapPost("/buy", async (BuyProductDTO dto) =>
         {
             BaseDTO result = await _productService.Buy(dto);
-            return result.Success ? BaseDTO.Valid("produto comprado") : BaseDTO.Invalid("produto não comprado", result.Message);
+            return result.Success ? Results.Ok(result) : Results.BadRequest(result);
         });
 
         _ = group.MapGet("/viewProducts", async () =>
         {
             BaseDTO result = await _productService.ViewAll();
-            return result;
+            return Results.Ok(result);
         });
     }
 }

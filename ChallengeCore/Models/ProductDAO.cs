@@ -37,7 +37,7 @@ public class ProductDAO : DatabaseConnection
         {
             using (_connection = Connect())
             {
-                ProductSQL? product = await _connection.QueryFirstAsync<ProductSQL>("SELECT * FROM products WHERE PR_ID = @ID", new
+                ProductSQL? product = await _connection.QuerySingleOrDefaultAsync<ProductSQL>("SELECT * FROM products WHERE PR_ID = @ID", new
                 {
                     ID = dto.IdProduct
                 });
@@ -46,7 +46,7 @@ public class ProductDAO : DatabaseConnection
                     return BaseDTO.Invalid("produto não encontrado");
                 }
 
-                UserSQL? user = await _connection.QueryFirstAsync<UserSQL>("SELECT US_ID FROM users WHERE US_EMAIL = @Email", new
+                UserSQL? user = await _connection.QuerySingleOrDefaultAsync<UserSQL>("SELECT US_ID FROM users WHERE US_EMAIL = @Email", new
                 {
                     dto.Email
                 });
@@ -70,7 +70,7 @@ public class ProductDAO : DatabaseConnection
         }
         catch (Exception)
         {
-            return BaseDTO.Invalid("não foi possível comprar o item");
+            throw;
         }
         finally { Disconnect(); }
     }
