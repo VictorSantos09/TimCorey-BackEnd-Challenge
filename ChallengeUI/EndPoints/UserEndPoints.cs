@@ -1,11 +1,12 @@
 ﻿using ChallengeCore.DTOs;
+using ChallengeCore.Models;
 using ChallengeCore.Services;
 
 namespace ChallengeUI.EndPoints;
 
 public static class UserEndPoints
 {
-    private static readonly UserService _userService = new();
+    private static readonly UserService _userService;
 
     public static void MapUserEndPoints(this IEndpointRouteBuilder app)
     {

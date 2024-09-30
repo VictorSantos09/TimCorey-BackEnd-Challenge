@@ -2,13 +2,13 @@
 using ChallengeCore.Models;
 
 namespace ChallengeCore.Services;
-public class UserService
+public class UserService : IUserService
 {
-    private readonly UserDAO _userDAO;
+    private readonly IUserDAO _userDAO;
 
-    public UserService()
+    public UserService(IUserDAO dao)
     {
-        _userDAO = new();
+        _userDAO = dao;
     }
 
     public async Task<BaseDTO> Register(UserDTO dto)

@@ -4,7 +4,7 @@ using ChallengeCore.SQLModels;
 using Dapper;
 
 namespace ChallengeCore.Models;
-public class UserDAO : DatabaseConnection
+public class UserDAO : DatabaseConnection, IUserDAO
 {
     public async Task<BaseDTO> Create(UserDTO dto)
     {
