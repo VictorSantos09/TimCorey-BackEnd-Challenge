@@ -1,31 +1,42 @@
-﻿using ChallengeCore.DTOs;
-using ChallengeCore.Services;
+﻿using ChallengeCore.Application.Services.Products;
+using ChallengeCore.Domain.Models;
 
 namespace ChallengeUI.EndPoints;
 
 public static class ProductEndPoints
 {
-    private static readonly ProductService _productService = new();
-
-    public static void MapProductsEndPoints(this IEndpointRouteBuilder app)
+    public static void MapProducts(this IEndpointRouteBuilder app)
     {
         RouteGroupBuilder group = app.MapGroup("api/products");
-        _ = group.MapPost("/viewUsersProducts", async (string email) =>
+
+        _ = group.MapGet("/", (IProductService productService) =>
         {
-            BaseDTO result = await _productService.GetUserProducts(email);
-            return Results.Ok(result);
+            var result = productService.GetAll();
+            return Results.Ok(result.Value);
         });
 
-        _ = group.MapPost("/buy", async (BuyProductDTO dto) =>
+        _ = group.MapGet("/{id:int}", (IProductService productService, int id) =>
         {
-            BaseDTO result = await _productService.Buy(dto);
-            return result.Success ? Results.Ok(result) : Results.BadRequest(result);
+            var result = productService.GetById(id);
+            return result.IsSuccess ? Results.Ok(result.Value) : Results.NotFound(result.Errors);
         });
 
-        _ = group.MapGet("/viewProducts", async () =>
+        _ = group.MapPost("/", (IProductService productService, Product entity) =>
         {
-            BaseDTO result = await _productService.ViewAll();
-            return Results.Ok(result);
+            var result = productService.Add(entity);
+            return result.IsSuccess ? Results.Ok() : Results.BadRequest(result.Errors);
+        });
+
+        _ = group.MapPut("/", (IProductService productService, Product entity) =>
+        {
+            var result = productService.Update(entity);
+            return result.IsSuccess ? Results.Ok() : Results.BadRequest(result.Errors);
+        });
+
+        _ = group.MapDelete("/{id:int}", (IProductService productService, int id) =>
+        {
+            var result = productService.Delete(id);
+            return result.IsSuccess ? Results.Ok() : Results.NotFound(result.Errors);
         });
     }
 }

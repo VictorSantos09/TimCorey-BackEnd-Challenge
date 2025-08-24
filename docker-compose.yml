@@ -1,0 +1,40 @@
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: timcorey
+    ports:
+      - "8081:3306"
+    networks:
+      - desafio-net
+
+  challenge-ui:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: challenge-ui
+    environment:
+      ASPNETCORE_URLS: http://+:80
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+    networks:
+      - desafio-net
+
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_ADMINPASSWORD=admin123
+    ports:
+      - "5341:80"
+    networks:
+      - desafio-net
+
+networks:
+  desafio-net:
+    driver: bridge

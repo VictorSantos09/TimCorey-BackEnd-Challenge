@@ -1,10 +1,11 @@
-using ChallengeCore.Services;
-using ChallengeUI.EndPoints;
+using ChallengeCore;
+using ChallengeUI;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+builder.AddCore();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddTransient<UserService>();
 
 WebApplication app = builder.Build();
 
@@ -18,6 +19,6 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty;
 });
 
-app.MapUserEndPoints();
-app.MapProductsEndPoints();
+app.ConfigureUI();
+
 app.Run();

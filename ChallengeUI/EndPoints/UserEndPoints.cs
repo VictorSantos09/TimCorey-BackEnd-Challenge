@@ -1,26 +1,47 @@
-﻿using ChallengeCore.DTOs;
-using ChallengeCore.Models;
-using ChallengeCore.Services;
+﻿using ChallengeCore.Application.Services.Users;
+using ChallengeCore.Domain.Models;
 
 namespace ChallengeUI.EndPoints;
 
 public static class UserEndPoints
 {
-    private static readonly UserService _userService;
-
-    public static void MapUserEndPoints(this IEndpointRouteBuilder app)
+    public static void MapUser(this IEndpointRouteBuilder app)
     {
         RouteGroupBuilder group = app.MapGroup("api/users");
-        _ = group.MapPost("/register", async (UserDTO dto) =>
+
+        _ = group.MapPost("/", (IUserService userService, ILogger<UserEndPointsLogger> logger, User user) =>
         {
-            BaseDTO result = await _userService.Register(dto);
-            return result.Success ? Results.Ok(new { result.Message }) : Results.BadRequest(new { result.Message });
+            var result = userService.Add(user);
+            logger.LogInformation("Resultado do registro de usuário: {Success}", result.IsSuccess);
+            return result.IsSuccess ? Results.Ok() : Results.BadRequest(result.Errors);
         });
 
-        _ = group.MapPost("/view", async (string email, string nickname) =>
+        _ = group.MapGet("/", (IUserService userService, ILogger<UserEndPointsLogger> logger) =>
         {
-            BaseDTO result = await _userService.ViewInfo(email, nickname);
-            return result.Success ? Results.Ok(result.Data) : Results.BadRequest(new { result.Message });
+            var result = userService.GetAll();
+            logger.LogInformation("Total de usuários retornados: {Count}", result.Value?.Count() ?? 0);
+            return Results.Ok(result.Value);
+        });
+
+        _ = group.MapGet("/{id:int}", (IUserService userService, ILogger<UserEndPointsLogger> logger, int id) =>
+        {
+            var result = userService.GetById(id);
+            logger.LogInformation("Usuário encontrado: {Success}", result.IsSuccess);
+            return result.IsSuccess ? Results.Ok(result.Value) : Results.NotFound(result.Errors);
+        });
+
+        _ = group.MapPut("/", (IUserService userService, ILogger<UserEndPointsLogger> logger, User entity) =>
+        {
+            var result = userService.Update(entity);
+            logger.LogInformation("Resultado da atualização de usuário: {Success}", result.IsSuccess);
+            return result.IsSuccess ? Results.Ok(result) : Results.BadRequest(result.Errors);
+        });
+
+        _ = group.MapDelete("/{id:int}", (IUserService userService, ILogger<UserEndPointsLogger> logger, int id) =>
+        {
+            var result = userService.Delete(id);
+            logger.LogInformation("Resultado da remoção de usuário: {Success}", result.IsSuccess);
+            return result.IsSuccess ? Results.Ok(result) : Results.NotFound(result.Errors);
         });
     }
 }
