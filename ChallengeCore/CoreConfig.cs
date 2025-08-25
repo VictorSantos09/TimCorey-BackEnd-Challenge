@@ -1,21 +1,26 @@
-﻿using ChallengeCore.Application.Services.Products;
+using ChallengeCore.Application.Services.Products;
 using ChallengeCore.Application.Services.Purchases;
 using ChallengeCore.Application.Services.Users;
 using ChallengeCore.Extensions;
 using ChallengeCore.Infrastructure.Data;
+using ChallengeCore.Infrastructure.Logging;
 using ChallengeCore.Infrastructure.Repository;
 using ChallengeCore.Infrastructure.Repository.Abstractions;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+
 using Polly;
+
 using Serilog;
 
 namespace ChallengeCore;
@@ -26,99 +31,97 @@ public static class CoreConfig
 {
     public static void AddCore(this WebApplicationBuilder builder)
     {
-        builder.Services.AddControllers();
+        _ = builder.Services.AddControllers();
 
-        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-        builder.Services.AddProblemDetails();
+        _ = builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        _ = builder.Services.AddProblemDetails();
 
         if (builder.Environment.IsProduction())
         {
-            builder.WebHost.UseUrls("http://*:80");
+            _ = builder.WebHost.UseUrls("http://*:80");
         }
 
         AddLogging(builder);
 
-        var connectionString = builder.Configuration.GetRequiredConnectionString();
+        string connectionString = builder.Configuration.GetRequiredConnectionString();
 
-        builder.Services.AddDbContext<AppDbContext>(options =>
+        _ = builder.Services.AddDbContext<AppDbContext>(options =>
                     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-        builder.Services.AddScoped<DbContext, AppDbContext>();
+        _ = builder.Services.AddScoped<DbContext, AppDbContext>();
 
-        builder.Services
+        _ = builder.Services
             .AddRepositories()
             .AddServices();
     }
 
     public static void AddCore(this WebApplication app)
     {
-        app.MapControllers();
+        _ = app.MapControllers();
 
-        app.UseExceptionHandler();
-        app.UseSerilogRequestLogging();
+        _ = app.UseExceptionHandler();
+        _ = app.UseSerilogRequestLogging();
 
-        var logger = app.Services.GetRequiredService<ILogger<CoreConfigLogger>>();
+        ILogger<CoreConfigLogger> logger = app.Services.GetRequiredService<ILogger<CoreConfigLogger>>();
 
-        var retryPolicy = Polly.Policy
+        Polly.Retry.RetryPolicy retryPolicy = Policy
         .Handle<Exception>()
         .WaitAndRetry(15, i => TimeSpan.FromSeconds(5), (ex, ts) =>
         {
-            logger.LogWarning("Tentativa de conexão ao banco falhou {ex}", ex);
+            logger.Warning("Tentativa de conexão ao banco falhou {ex}", ex);
         });
 
-        using (var scope = app.Services.CreateScope())
+        using IServiceScope scope = app.Services.CreateScope();
+        retryPolicy.Execute(() =>
         {
-            retryPolicy.Execute(() =>
+            AppDbContext db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            if (db.Database.CanConnect())
             {
-                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                if (db.Database.CanConnect())
-                {
-                    logger.LogInformation("Aplicando migration.");
-                    db.Database.Migrate();
-                    logger.LogInformation("Migration aplicada com sucesso.");
-                }
-                else
-                {
-                    logger.LogError("Não foi possível conectar ao banco de dados.");
-                }
-            });
-        }
+                logger.Information("Aplicando migration.");
+                db.Database.Migrate();
+                logger.Information("Migration aplicada com sucesso.");
+            }
+            else
+            {
+                logger.Error("Não foi possível conectar ao banco de dados.");
+            }
+        });
     }
     private static void AddLogging(WebApplicationBuilder builder)
     {
-        builder.Logging.ClearProviders();
+        _ = builder.Logging.ClearProviders();
 
-        builder.Host.UseSerilog((context, configuration) =>
+        _ = builder.Host.UseSerilog((context, configuration) =>
         {
-            configuration
+            _ = configuration
                  .ReadFrom.Configuration(context.Configuration)
                  .Enrich.FromLogContext();
         });
 
-        builder.Services.AddOpenTelemetry()
+        _ = builder.Services.AddOpenTelemetry()
             .ConfigureResource(resource => resource.AddService("ChallengeAPI").AddService("connector-net"))
             .WithMetrics(metrics =>
             {
-                metrics.AddAspNetCoreInstrumentation();
-                metrics.AddHttpClientInstrumentation();
+                _ = metrics.AddAspNetCoreInstrumentation();
+                _ = metrics.AddHttpClientInstrumentation();
             })
             .WithTracing(tracing =>
             {
-                tracing.AddAspNetCoreInstrumentation();
-                tracing.AddEntityFrameworkCoreInstrumentation();
-                tracing.AddHttpClientInstrumentation();
+                _ = tracing.AddAspNetCoreInstrumentation();
+                _ = tracing.AddEntityFrameworkCoreInstrumentation();
+                _ = tracing.AddHttpClientInstrumentation();
 
-                tracing.AddConnectorNet();
-                tracing.AddOtlpExporter();
+                _ = tracing.AddConnectorNet();
+                _ = tracing.AddOtlpExporter();
             });
 
-        builder.Logging.AddOpenTelemetry(logging =>
+        _ = builder.Logging.AddOpenTelemetry(logging =>
         {
             logging.IncludeFormattedMessage = true;
             logging.ParseStateValues = true;
             logging.IncludeScopes = true;
 
-            logging
+            _ = logging
             .AddOtlpExporter(a =>
             {
                 a.Endpoint = new Uri("http://seq:5341/ingest/otlp/v1/logs");
@@ -130,18 +133,18 @@ public static class CoreConfig
 
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IProductRepository, ProductRepository>();
-        services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+        _ = services.AddScoped<IUserRepository, UserRepository>();
+        _ = services.AddScoped<IProductRepository, ProductRepository>();
+        _ = services.AddScoped<IPurchaseRepository, PurchaseRepository>();
 
         return services;
     }
 
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddScoped<IUserService, UserService>();
-        services.AddScoped<IProductService, ProductService>();
-        services.AddScoped<IPurchaseService, PurchaseService>();
+        _ = services.AddScoped<IUserService, UserService>();
+        _ = services.AddScoped<IProductService, ProductService>();
+        _ = services.AddScoped<IPurchaseService, PurchaseService>();
 
         return services;
     }

@@ -20,7 +20,7 @@ dotnet_naming_rule.private_or_internal_field_should_be__fildname.severity = sugg
 dotnet_naming_rule.private_or_internal_field_should_be__fildname.symbols = private_or_internal_field
 dotnet_naming_rule.private_or_internal_field_should_be__fildname.style = _fildname
 
-# Especificações de símbolo
+# EspecificaÃ§Ãµes de sÃ­mbolo
 
 dotnet_naming_symbols.interface.applicable_kinds = interface
 dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
@@ -108,14 +108,19 @@ csharp_indent_labels = one_less_than_current
 csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = true
 
+# CA1848: Use the LoggerMessage delegates
+dotnet_diagnostic.CA1848.severity = none
+csharp_style_prefer_primary_constructors = true:suggestion
+csharp_prefer_system_threading_lock = true:suggestion
+
 [*.vb]
 #### Estilos de nomenclatura ####
 
 # Regras de nomenclatura
 
-dotnet_naming_rule.interface_should_be_começa_com_i.severity = suggestion
-dotnet_naming_rule.interface_should_be_começa_com_i.symbols = interface
-dotnet_naming_rule.interface_should_be_começa_com_i.style = começa_com_i
+dotnet_naming_rule.interface_should_be_comeÃ§a_com_i.severity = suggestion
+dotnet_naming_rule.interface_should_be_comeÃ§a_com_i.symbols = interface
+dotnet_naming_rule.interface_should_be_comeÃ§a_com_i.style = comeÃ§a_com_i
 
 dotnet_naming_rule.tipos_should_be_pascal_case.severity = suggestion
 dotnet_naming_rule.tipos_should_be_pascal_case.symbols = tipos
@@ -125,7 +130,7 @@ dotnet_naming_rule.membros_sem_campo_should_be_pascal_case.severity = suggestion
 dotnet_naming_rule.membros_sem_campo_should_be_pascal_case.symbols = membros_sem_campo
 dotnet_naming_rule.membros_sem_campo_should_be_pascal_case.style = pascal_case
 
-# Especificações de símbolo
+# EspecificaÃ§Ãµes de sÃ­mbolo
 
 dotnet_naming_symbols.interface.applicable_kinds = interface
 dotnet_naming_symbols.interface.applicable_accessibilities = public, friend, private, protected, protected_friend, private_protected
@@ -141,10 +146,10 @@ dotnet_naming_symbols.membros_sem_campo.required_modifiers =
 
 # Estilos de nomenclatura
 
-dotnet_naming_style.começa_com_i.required_prefix = I
-dotnet_naming_style.começa_com_i.required_suffix = 
-dotnet_naming_style.começa_com_i.word_separator = 
-dotnet_naming_style.começa_com_i.capitalization = pascal_case
+dotnet_naming_style.comeÃ§a_com_i.required_prefix = I
+dotnet_naming_style.comeÃ§a_com_i.required_suffix = 
+dotnet_naming_style.comeÃ§a_com_i.word_separator = 
+dotnet_naming_style.comeÃ§a_com_i.capitalization = pascal_case
 
 dotnet_naming_style.pascal_case.required_prefix = 
 dotnet_naming_style.pascal_case.required_suffix = 

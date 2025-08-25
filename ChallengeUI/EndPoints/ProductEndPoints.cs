@@ -1,4 +1,4 @@
-﻿using ChallengeCore.Application.Services.Products;
+using ChallengeCore.Application.Services.Products;
 using ChallengeCore.Domain.Models;
 
 namespace ChallengeUI.EndPoints;
@@ -7,7 +7,7 @@ public static class ProductEndPoints
 {
     public static void MapProducts(this IEndpointRouteBuilder app)
     {
-        RouteGroupBuilder group = app.MapGroup("api/products");
+        var group = app.MapGroup("api/products");
 
         _ = group.MapGet("/", (IProductService productService) =>
         {

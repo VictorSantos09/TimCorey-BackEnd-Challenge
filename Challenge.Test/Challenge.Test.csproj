@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentResults" Version="4.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.8" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
     <PackageReference Include="NSubstitute" Version="5.1.0" />
     <PackageReference Include="xunit" Version="2.4.2" />
@@ -26,6 +27,18 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ChallengeCore\ChallengeCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Fontes\TimCorey-BackEnd-Challenge\Challenge.Test\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Fontes\TimCorey-BackEnd-Challenge\Challenge.Test\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Infrastructure\Repository\" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 using Ardalis.GuardClauses;
-using ChallengeCore.Domain.Models;
+
+namespace ChallengeCore.Domain.Models;
 
 public class PurchaseItem
 {
@@ -23,6 +24,6 @@ public class PurchaseItem
 
     public PurchaseItem()
     {
-        
+
     }
 }

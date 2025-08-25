@@ -1,5 +1,5 @@
 using ChallengeCore.Domain.Models;
-using ChallengeCore.Shared;
+using ChallengeCore.Shareed;
 
 namespace ChallengeCore.Application.Services.Purchases;
 

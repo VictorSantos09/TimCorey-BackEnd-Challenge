@@ -1,5 +1,5 @@
-﻿using ChallengeCore.Domain.Models;
-using ChallengeCore.Shared;
+using ChallengeCore.Domain.Models;
+using ChallengeCore.Shareed;
 
 namespace ChallengeCore.Infrastructure.Repository.Abstractions;
 public interface IProductRepository : IRepository<Product>;

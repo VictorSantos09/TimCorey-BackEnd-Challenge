@@ -1,4 +1,4 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
 
 namespace ChallengeCore.Extensions;
 public static class GuardClauseExtensions
@@ -8,8 +8,8 @@ public static class GuardClauseExtensions
                                                  string? parameterName = null,
                                                  string? message = null)
     {
-        guardClause.NullOrEmpty(input, parameterName, message);
-        guardClause.NullOrWhiteSpace(input, parameterName, message);
+        _ = guardClause.NullOrEmpty(input, parameterName, message);
+        _ = guardClause.NullOrWhiteSpace(input, parameterName, message);
         return input;
     }
 }

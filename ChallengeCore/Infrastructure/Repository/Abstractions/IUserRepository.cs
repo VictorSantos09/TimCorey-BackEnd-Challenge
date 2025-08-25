@@ -1,8 +1,8 @@
-﻿using ChallengeCore.Domain.Models;
-using ChallengeCore.Shared;
+using ChallengeCore.Domain.Models;
+using ChallengeCore.Shareed;
 
 namespace ChallengeCore.Infrastructure.Repository.Abstractions;
 public interface IUserRepository : IRepository<User>
 {
-    User? Get(string email);
+    User? GetByEmail(string email);
 }

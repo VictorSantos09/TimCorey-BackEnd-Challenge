@@ -1,4 +1,5 @@
 ﻿using ChallengeCore;
+
 using ChallengeUI.EndPoints;
 
 namespace ChallengeUI;
@@ -10,7 +11,7 @@ public static class Configuration
         app.MapUser();
         app.MapProducts();
         app.MapPurchases();
-        
+
         app.AddCore();
 
         return app;

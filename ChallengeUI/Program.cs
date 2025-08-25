@@ -1,16 +1,19 @@
 using ChallengeCore;
+
 using ChallengeUI;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 builder.AddCore();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-WebApplication app = builder.Build();
+var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
+{
     _ = app.UseDeveloperExceptionPage();
+}
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>

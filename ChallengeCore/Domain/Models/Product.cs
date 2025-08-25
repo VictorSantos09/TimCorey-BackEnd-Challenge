@@ -1,4 +1,4 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
 
 namespace ChallengeCore.Domain.Models;
 
@@ -20,6 +20,6 @@ public class Product
 
     public Product()
     {
-        
+
     }
 }

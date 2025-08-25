@@ -1,4 +1,4 @@
-﻿namespace ChallengeCore.Shared;
+namespace ChallengeCore.Shareed;
 
 public interface IRepository<T> : IGetAllRepository<T>, IGetByIdRepository<T>, IAddRepository<T>, IUpdateRepository<T>, IDeleteRepository<T>;
 

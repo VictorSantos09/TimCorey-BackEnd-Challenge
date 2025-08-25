@@ -1,4 +1,4 @@
-﻿using ChallengeCore.Application.Services.Purchases;
+using ChallengeCore.Application.Services.Purchases;
 using ChallengeCore.Domain.Models;
 
 namespace ChallengeUI.EndPoints;
@@ -7,7 +7,7 @@ public static class PurchaseEndPoints
 {
     public static void MapPurchases(this IEndpointRouteBuilder app)
     {
-        RouteGroupBuilder group = app.MapGroup("api/purchases");
+        var group = app.MapGroup("api/purchases");
 
         _ = group.MapGet("/", (IPurchaseService purchaseService) =>
         {

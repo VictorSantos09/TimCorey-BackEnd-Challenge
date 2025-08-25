@@ -1,4 +1,5 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
+
 using Microsoft.Extensions.Configuration;
 
 namespace ChallengeCore.Extensions;

@@ -1,6 +1,6 @@
-﻿using FluentResults;
+using FluentResults;
 
-namespace ChallengeCore.Shared;
+namespace ChallengeCore.Shareed;
 
 public interface IService<T> : IGetAllService<T>, IGetByIdService<T>, IAddService<T>, IUpdateService<T>, IDeleteService;
 

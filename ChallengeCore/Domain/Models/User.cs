@@ -1,4 +1,5 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
+
 using ChallengeCore.Extensions;
 
 namespace ChallengeCore.Domain.Models;
